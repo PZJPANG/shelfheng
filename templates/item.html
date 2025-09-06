@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block body %}   
+ 
+    <style>
+    .item {
+        overflow: auto;
+        width: 100%;
+    }
+
+    .item table {
+        border: 1px solid #dededf;
+        height: 100%;
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        border-spacing: 1px;
+        text-align: left;
+    }
+
+    .item caption {
+        caption-side: top;
+        text-align: left;
+    }
+
+    .item th {
+        border: 1px solid #dededf;
+        background-color: #eceff1;
+        color: #000000;
+        padding: 5px;
+    }
+
+    .item td {
+        border: 1px solid #dededf;
+        background-color: #ffffff;
+        color: #000000;
+        padding: 5px;
+    }
+    </style>
+    <div class="item" role="region" tabindex="0">
+    <table>
+        <caption>
+            <p>Item</p>
+        </caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Place</th>
+                <th>Shelf</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.place }}</td>
+                    <td>{{ item.shelf }}</td>
+                </tr>
+        </tbody>
+    </table>
+    </div>
+    <form action="/add" method="POST">
+        <button id="add" type="submit">Add item</button>
+    </form>
+    <form action="/delete" method="POST">
+        <button id="delete" type="submit">Delete item</button>
+    </form>
+
+{% endblock %}
