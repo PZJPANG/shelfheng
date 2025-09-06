@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1> REGISTER </h1>
+    <p></p>
+    <form action="/register" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus name="username" placeholder="Username" type="text">
+        </div>
+        <div class="mb-3">
+            <input id="password" name="password" placeholder="Password" type="password">
+        </div>
+        <div class="mb-3">
+            <input id="confirmation" name="confirmation" placeholder="Confirm your password" type="password">
+        </div>
+        <p id="message"></p>
+        <button id="submit" type="submit" disabled>Register</button>
+
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let password = document.querySelector("#password");
+            let confirmation = document.querySelector("#confirmation");
+            let message = document.querySelector("#message");
+            let submit = document.querySelector("#submit");
+            confirmation.addEventListener("keyup", function() {
+                if (password.value !== confirmation.value) {
+                    message.innerHTML = "Password do not matched, please retype";
+                    confirmation.style.color = "red";
+                } else {
+                    message.innerHTML = "Password matched, please continue";
+                    confirmation.style.color = "green";
+                    submit.disabled = false;
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

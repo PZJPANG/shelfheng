@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+body {
+    font-family: 'Rubik';
+    font-weight: 700;
+    color: black;
+}
+
+body.body_option{
+    height: 100vh; /* exactly one screen tall */
+    overflow: hidden; /* no scrolling */
+    background-image: url('world.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    text-align: center;
+}
+
+body.about_body{
+    height: 100vh; /* exactly one screen tall */
+    overflow: hidden; /* no scrolling */
+    background-image: url('world.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-left: 50px;
+    padding: 40px;
+}
+
+body.index_body {
+    height: 100vh; /* exactly one screen tall */
+    overflow: hidden; /* no scrolling */
+    background-image: url('home_bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+body.world_body {
+    height: 100vh; /* exactly one screen tall */
+    overflow: hidden; /* no scrolling */
+    background-image: url('world.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+#musicbtn {
+    width: 160px;
+    height: 160px;
+    cursor: pointer;
+}
+
+#search_btn {
+    font-weight: 600;
+    width: 180px;
+    padding: 12.5px;
+    border-radius: 8px;
+    font-size: 18px;
+    background-color: rgb(119,136,153);
+    cursor: pointer;
+}
+
+.render_hint {
+    margin-left: 395px;
+    font-size: 19px;
+    opacity: 0.8;
+}
+
+#world_form {
+    font-size: 28px; /* Bigger text */
+    text-align: center;
+}
+
+
+/* Style the input box */
+#world_search {
+    font-family: 'Rubik';
+    font-weight: 700;
+    width: 800px;               /* make it wider */
+    padding: 12.5px;               /* add space inside */
+    border-radius: 8px;          /* rounded corners */
+    font-size: 20px;             /* larger text */
+    outline: none;               /* remove blue highlight on click */
+    transition: all 0.3s ease;   /* smooth animation */
+    background-color: rgb(119,136,153);
+}
+
+#world_search::placeholder {
+    font-size: 16px;
+    color: lightblue;        /* Text color of placeholder */
+    opacity: 0.8;              /* Make sure it’s fully visible */
+    font-style: italic;      /* Optional: make it italic */
+}
+
+
+/* Change style when focused */
+#world_search:focus {
+    border-color: #21C6FF;       /* blue border on focus */
+    box-shadow: 0 0 8px rgba(33, 190, 255, 0.6); /* glowing effect */
+}
+
+.top_world{
+    font-size: 20px;
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+.top_world:nth-child(2 of .top_world) {
+    margin-top: 40px;
+}
+
+.world1-btn{
+    margin-left: 10px;
+    font-weight: 700;
+    font-size: 22px;
+    border: none;
+    border-radius: 4px;
+    background-color: rgb(119,136,153);
+    cursor: pointer;
+}
+
+.back-btn{
+    display: inline-block;
+    width: 180px;
+    padding: 16px;
+    margin-left: 40px;
+    margin-top: 200px;
+    font-weight: 700;
+    font-size: 52px;
+    border: none;
+    border-radius: 4px;
+    background-color: rgb(119, 136, 153);
+    cursor: pointer;
+    color: white; /* ensures link text is white */
+    text-decoration: none; /* removes underline */
+    text-align: center; /* centers the text horizontally */
+    line-height: normal; /* make sure it's not too tall or off-center */
+}
+
+
+.world1-btn:first-child {
+    margin-left: 50px;
+}
+
+body.index_body .back-btn{
+    background-color: rgb(70,185,50);
+    display: inline-block;
+    border-radius: 6px;
+    width: 320px;
+    padding: 19px;
+    margin-left: 955px;
+    margin-top: 415px;
+    font-weight: 700;
+    font-size: 44px;
+    cursor: pointer;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 1);
+}
+
+/* keep your base styles */
+.homepage-btn{
+  display:inline-block;
+  margin-top:25px;
+  margin-left:1000px;
+  border-radius:6px;
+  font-size:28px;
+  width:220px;
+  padding:16px;
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  line-height:normal;
+  background-color:rgb(155,205,250);
+  box-shadow:2px 4px 6px rgba(0,0,0,1);
+}
+/*count by div */
+body.index_body div p:nth-child(3) .homepage-btn {
+    margin-top: 5px;
+}
+
+table {
+    margin: 0 auto; /* center table horizontally */
+    border-collapse: collapse; /* remove double borders */
+    text-align: center; /* center text inside cells */
+}
+
+th, td {
+    border: 1px solid black; /* table border */
+    padding: 8px 16px; /* space inside cells */
+}
+
+th {
+    background-color: #f2f2f2; /* light gray header background */
+}
+
+body.body_option .back-btn{
+    margin-right: 1800px;
+    margin-top: 365px;
+}
+
+.about_body .back-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50px; /* moves it away from the right edge */
+}
+
+body.world_body .back-btn{
+
+    margin-top: 385px;
+}
