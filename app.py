@@ -97,3 +97,20 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
+
+@app.route("/item", methods=["GET", "POST"])
+def item():
+    if request.method == "GET":
+        errorcode = 400
+        message = "Please select a shelf and a place beforehand!"
+        return render_template("apology.html", errorcode = errorcode, message = message)
+    else:
+        items = db.execute("SELECT * FROM items WHERE place = ?, shelf = ?")
+        return render_template("add.html", items = items)
+    
+
+@app.route("/add", methods=["GET", "POST"])
+def add():
+    if request.method == "POST":
+        return render_template("add.html")
+    return render_template("add.html")
