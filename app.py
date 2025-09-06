@@ -13,7 +13,6 @@ Session(app)
 
 @app.route("/")
 def index():
-
     return render_template("index.html")
 
 
@@ -29,11 +28,15 @@ def login():
     if request.method == "POST":
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 400)
+            errorcode = 400
+            message = "must provide username"
+            return render_template("apology.html", errorcode = errorcode, message = message)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 400)
+            errorcode = 400
+            message = "must provide password"
+            return render_template("apology.html", errorcode = errorcode, message = message)
 
         # Query database for username
         rows = db.execute(
@@ -44,7 +47,9 @@ def login():
         if len(rows) != 1 or not check_password_hash(
             rows[0]["hash"], request.form.get("password")
         ):
-            return apology("invalid username and/or password", 400)
+            errorcode = 400
+            message = "invalid username/ password"
+            return render_template("apology.html", errorcode = errorcode, message = message)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -77,15 +82,25 @@ def register():
         confirmation = request.form.get("confirmation")
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         if not username:
-            return apology("Username is required ", 400)
+            errorcode = 400
+            message = "Must provide username"
+            return render_template("apology.html", errorcode = errorcode, message = message)
         elif not password:
-            return apology("Password is required", 400)
+            errorcode = 400
+            message = "must provide password"
+            return render_template("apology.html", errorcode = errorcode, message = message)
         elif not confirmation:
-            return apology("You must confirm your password", 400)
+            errorcode = 400
+            message = "must confirm your password"
+            return render_template("apology.html", errorcode = errorcode, message = message)
         elif confirmation != password:
-            return apology("Password do not match", 400)
+            errorcode = 400
+            message = "confirmation not match"
+            return render_template("apology.html", errorcode = errorcode, message = message)
         elif len(rows) != 0:
-            return apology("The user already exist", 400)
+            errorcode = 400
+            message = "username exist, try to login"
+            return render_template("apology.html", errorcode = errorcode, message = message)
         else:
             # add new user into the database
             db.execute("INSERT INTO users (username, hash) VALUES (?, ?)",
@@ -97,6 +112,7 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
+
 
 @app.route("/item", methods=["GET", "POST"])
 def item():
