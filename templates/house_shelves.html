@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ house.name }} - Shelves
+{% endblock %}
+
+{% block body %}
+
+<style>
+:root{
+  --bg:#0f0f11; --elev:#17171a; --border:#2a2a31;
+  --text:#ececf3; --muted:#1b1b1f; --gold:#f2c14e; --gold-700:#d4a52a;
+}
+.shelves-page{ max-width:1200px; margin:64px auto; padding:0 20px; color:var(--text); }
+.shelves-title{
+  font-weight:800; font-size:clamp(34px,6vw,88px);
+  text-align:center; margin:6px 0 20px; letter-spacing:.5px;
+  color:var(--gold);
+}
+.breadcrumb{
+  display:flex; align-items:center; margin:20px 0; color:#bdbdcc;
+  font-size:14px;
+}
+.breadcrumb a{ color:var(--gold); text-decoration:none; }
+.breadcrumb a:hover{ text-decoration:underline; }
+.shelves-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:24px; margin:32px 0;
+}
+.shelf-card{
+  background:linear-gradient(180deg,#1c1c21,#141416);
+  border:1px solid var(--border); border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35); padding:24px;
+  transition:transform .3s ease,box-shadow .3s ease; cursor:pointer;
+  text-align:center;
+}
+.shelf-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 40px rgba(242,193,78,.15);
+}
+.shelf-name{
+  font-size:24px; font-weight:700; color:var(--gold);
+  margin:0 0 12px; font-family:'Times New Roman',serif;
+}
+.shelf-details{
+  color:#bdbdcc; font-size:14px; margin:0 0 20px;
+}
+.view-btn{
+  display:inline-block; padding:10px 24px; border-radius:12px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:600; cursor:pointer; 
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  text-decoration:none; font-size:16px;
+  transition:filter .12s ease,transform .12s ease;
+}
+.view-btn:hover{
+  filter:brightness(1.05); transform:translateY(-1px);
+  color:#fff; text-decoration:none;
+}
+.back-btn{
+  display:inline-block; margin:20px 0;
+  padding:8px 20px; border-radius:8px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:600; cursor:pointer; 
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  text-decoration:none; font-size:14px;
+  transition:filter .12s ease,transform .12s ease;
+}
+.back-btn:hover{
+  filter:brightness(1.05); transform:translateY(-1px);
+  color:#fff; text-decoration:none;
+}
+.empty-state{
+  text-align:center; margin:60px 0; color:#bdbdcc;
+}
+.empty-title{
+  font-size:24px; font-weight:600; margin:0 0 8px; color:var(--text);
+}
+.empty-text{
+  font-size:16px; margin:0; color:#a1a1ae;
+}
+.add-btn{
+  display:block; margin:32px auto 0;
+  padding:12px 32px; border-radius:12px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:700; cursor:pointer; 
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  text-decoration:none; font-size:16px;
+  transition:filter .12s ease,transform .12s ease;
+}
+.add-btn:hover{
+  filter:brightness(1.05); transform:translateY(-1px);
+  color:#fff; text-decoration:none;
+}
+</style>
+
+<div class="shelves-page">
+  <h1 class="shelves-title">{{ house.name }}</h1>
+  
+  <div class="breadcrumb">
+    <a href="/house">Houses</a> → 
+    <span>{{ house.name }}</span>
+  </div>
+  
+  <a href="/house" class="back-btn">← Back to Houses</a>
+  
+  <div style="margin:20px 0; padding:16px; background:#1a1a1a; border-radius:8px;">
+    <p style="color:#bdbdcc; margin:0; font-size:16px;">
+      <strong>Address:</strong> {{ house.address }}
+    </p>
+  </div>
+  
+  {% if shelves %}
+    <div class="shelves-grid">
+      {% for shelf in shelves %}
+      <div class="shelf-card">
+        <h3 class="shelf-name">{{ shelf.name }}</h3>
+        <p class="shelf-details">
+          Shelf ID: {{ shelf.id }}<br>
+          House: {{ house.name }}
+        </p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+          <a href="/shelf/{{ shelf.id }}/items" class="view-btn">View Items</a>
+          <button class="delete-shelf-btn" 
+                  data-shelf-id="{{ shelf.id }}" 
+                  data-shelf-name="{{ shelf.name }}"
+                  style="background: linear-gradient(180deg, #ef4444, #dc2626); color: white; border: none; padding: 10px 16px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none;">
+            Delete
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3 class="empty-title">No shelves in this house yet</h3>
+      <p class="empty-text">Add shelves to organize your items!</p>
+    </div>
+  {% endif %}
+  
+  <a href="/house/{{ house.id }}/add_shelf" class="add-btn">Add New Shelf</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Use event delegation for delete buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-shelf-btn')) {
+            const shelfId = e.target.getAttribute('data-shelf-id');
+            const shelfName = e.target.getAttribute('data-shelf-name');
+            
+            if (confirm(`Are you sure you want to delete "${shelfName}"? This will also delete all items in this shelf. This action cannot be undone.`)) {
+                // Create a form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/delete_shelf/${shelfId}`;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}

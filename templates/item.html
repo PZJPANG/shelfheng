@@ -9,7 +9,7 @@
   --text:#ececf3; --sub:#bdbdcc; --border:#2a2a31;
   --gold:#f2c14e; --gold-700:#d4a52a; --danger:#ef4444;
 }
-body{ background: radial-gradient(1200px 800px at 50% -200px, #1a1a1e 0%, var(--bg) 40%, var(--bg) 100%); }
+body{ background-color: #202020; }
 .page{
   max-width: 1200px; margin: 48px auto; padding: 0 20px; color: var(--text);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
@@ -90,7 +90,7 @@ input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--gold); }
                   <input type="checkbox" class="row-check" name="item_id" value="{{ item.item_id }}">
                 </td>
                 <td>{{ item.name }}</td>
-                <td>{{ item.place }}</td>
+                <td>{{ item.house_name or item.place }}</td>
                 <td>{{ item.shelf }}</td>
               </tr>
               {% endfor %}

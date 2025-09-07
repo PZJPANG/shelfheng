@@ -1,20 +1,77 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Apology
+Error {{ errorcode }}
 {% endblock %}
 
-{% block body %}   
-    <style>
-        div {
-            font-size: 50px;
-            font-family: 'Times New Roman';
-        }
-    </style>
-    <div>
-        Error Code: {{errorcode}}
-    </div>
-    <div>
-        Message: {{message}}
-    </div>
+{% block body %}
+
+<style>
+:root{
+  --bg:#0f0f11; --elev:#17171a; --border:#2a2a31;
+  --text:#ececf3; --muted:#1b1b1f; --gold:#f2c14e; --gold-700:#d4a52a;
+  --error:#ef4444; --error-700:#dc2626;
+}
+.error-page{ 
+  max-width:600px; margin:80px auto; padding:0 20px; color:var(--text); 
+  text-align:center;
+}
+.error-icon{
+  font-size:120px; margin-bottom:20px; color:var(--error);
+  text-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+.error-code{
+  font-size:clamp(48px,8vw,72px); font-weight:800; color:var(--error);
+  margin:0 0 16px; letter-spacing:2px;
+  font-family:'Times New Roman',serif;
+}
+.error-message{
+  font-size:20px; color:#bdbdcc; margin:0 0 40px; line-height:1.6;
+  background:linear-gradient(180deg,#1c1c21,#141416);
+  border:1px solid var(--border); border-radius:12px;
+  padding:24px; box-shadow:0 8px 25px rgba(0,0,0,.35);
+}
+.error-actions{
+  display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+}
+.btn{
+  padding:12px 24px; border-radius:12px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:700; cursor:pointer; 
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  text-decoration:none; font-size:16px;
+  transition:filter .12s ease,transform .12s ease;
+  display:inline-block;
+}
+.btn:hover{
+  filter:brightness(1.05); transform:translateY(-1px);
+  color:#fff; text-decoration:none;
+}
+.btn-secondary{
+  background:linear-gradient(180deg,#6b7280,#4b5563);
+  border-color:#6b7280;
+}
+.btn-secondary:hover{
+  background:linear-gradient(180deg,#9ca3af,#6b7280);
+}
+</style>
+
+<div class="error-page">
+  <div class="error-icon">⚠️</div>
+  
+  <h1 class="error-code">{{ errorcode }}</h1>
+  
+  <div class="error-message">
+    {{ message }}
+  </div>
+  
+  <div class="error-actions">
+    <a href="javascript:history.back()" class="btn btn-secondary">← Go Back</a>
+    <a href="/" class="btn">🏠 Home</a>
+    {% if session["user_id"] %}
+    <a href="/mainpage" class="btn">📋 Dashboard</a>
+    {% endif %}
+  </div>
+</div>
+
 {% endblock %}

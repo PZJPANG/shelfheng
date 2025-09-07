@@ -62,7 +62,7 @@ Search
       {% if items %}
         {% for item in items %}
           <div class="note ok result-line">
-            Found: <strong>{{ item.name }}</strong> — {{ item.place }}, Shelf {{ item.shelf }}
+            Found: <strong>{{ item.name }}</strong> — {{ item.house_name or item.place }}, {{ item.shelf }}
           </div>
         {% endfor %}
       {% else %}

@@ -58,12 +58,35 @@ Add
         <input autocomplete="off" autofocus id="name" name="name" placeholder="Item Name" type="text" required>
 
         <select name="place" id="place" required>
-        <option value="" disabled selected>House</option>
-        <option value="House A">House A</option>
-        <option value="House B">House B</option>
+        <option value="" disabled {% if not request.args.get('house') %}selected{% endif %}>Select House</option>
+        {% for place in places %}
+        <option value="{{ place.id }}" {% if request.args.get('house') == place.id|string %}selected{% endif %}>{{ place.name }}</option>
+        {% endfor %}
         </select>
+        
+        {% if not places %}
+        <div style="background: #2a1a1a; border: 1px solid #4d2b2b; border-radius: 8px; padding: 12px; margin: 12px 0; color: #ffd7d7; font-size: 14px;">
+            <strong>No houses found!</strong> You need to add a house first before adding items. 
+            <a href="/add_house" style="color: var(--gold); text-decoration: underline;">Add a new house here</a>.
+        </div>
+        {% else %}
+        <div style="background: #1a2a1a; border: 1px solid #2b4a33; border-radius: 8px; padding: 12px; margin: 12px 0; color: #b7f7c2; font-size: 14px;">
+            <strong>Tip:</strong> Don't see your house? 
+            <a href="/add_house" style="color: var(--gold); text-decoration: underline;">Add a new house here</a>.
+        </div>
+        {% endif %}
 
-        <input autocomplete="off" name="shelf" id="shelf" placeholder="Shelf" type="text" required>
+        <select name="shelf" id="shelf" required>
+        <option value="" disabled {% if not request.args.get('shelf') %}selected{% endif %}>Select Shelf</option>
+        {% for shelf in shelves %}
+        <option value="{{ shelf.name }}" data-place-id="{{ shelf.place_id }}" {% if request.args.get('shelf') == shelf.name %}selected{% endif %}>{{ shelf.name }}</option>
+        {% endfor %}
+        </select>
+        
+        <div id="shelf-note" style="background: #1a2a1a; border: 1px solid #2b4a33; border-radius: 8px; padding: 12px; margin: 12px 0; color: #b7f7c2; font-size: 14px; display: none;">
+            <strong>Tip:</strong> Don't see the shelf you need? 
+            <a href="#" id="add-shelf-link" style="color: var(--gold); text-decoration: underline;">Add a new shelf to this house</a>.
+        </div>
 
         <p id="message"></p>
         <button type="submit" style="color:white">Add</button>
@@ -72,7 +95,47 @@ Add
 
     <script>
         const nameInput = document.querySelector("#name");
+        const placeSelect = document.querySelector("#place");
+        const shelfSelect = document.querySelector("#shelf");
+        const shelfNote = document.querySelector("#shelf-note");
+        const addShelfLink = document.querySelector("#add-shelf-link");
         const msg = document.querySelector("#message");
+
+        // Load shelves when house is selected
+        placeSelect.addEventListener("change", async function() {
+            const houseId = this.value;
+            if (!houseId) {
+                // Clear shelf options
+                shelfSelect.innerHTML = '<option value="" disabled selected>Select Shelf</option>';
+                shelfNote.style.display = 'none';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/get_shelves/${houseId}`);
+                const shelves = await res.json();
+                
+                // Update shelf dropdown
+                shelfSelect.innerHTML = '<option value="" disabled selected>Select Shelf</option>';
+                shelves.forEach(shelf => {
+                    const option = document.createElement('option');
+                    option.value = shelf.name;
+                    option.textContent = shelf.name;
+                    shelfSelect.appendChild(option);
+                });
+
+                // Show/hide shelf note
+                if (shelves.length === 0) {
+                    shelfNote.style.display = 'block';
+                    addShelfLink.href = `/house/${houseId}/add_shelf`;
+                } else {
+                    shelfNote.style.display = 'block';
+                    addShelfLink.href = `/house/${houseId}/add_shelf`;
+                }
+            } catch (error) {
+                console.error('Error loading shelves:', error);
+            }
+        });
 
         async function checkName(itemName) {
         if (!itemName) { msg.textContent = ""; return; }
@@ -93,7 +156,12 @@ Add
             const place = data.place ?? "(unknown place)";
             const shelf = data.shelf ?? "(unknown shelf)";
             msg.textContent = `Alert: This item already exists in ${place} Shelf ${shelf}.`;
-            msg.style.color = 'red';
+            msg.style.color = '#ff9999';
+            msg.style.background = '#2a1a1a';
+            msg.style.border = '1px solid #4d2b2b';
+            msg.style.borderRadius = '8px';
+            msg.style.padding = '12px';
+            msg.style.margin = '12px 0';
         } else {
             msg.textContent = "";
             msg.removeAttribute('style');
@@ -103,5 +171,17 @@ Add
         nameInput.addEventListener("keyup", function () {
         checkName(this.value);
         });
+
+        // Initialize shelves if a house is already selected
+        if (placeSelect.value) {
+            placeSelect.dispatchEvent(new Event('change'));
+        }
+        
+        // Show shelf note if coming from shelf interface
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('house') && urlParams.get('shelf')) {
+            shelfNote.style.display = 'block';
+            addShelfLink.href = `/house/${urlParams.get('house')}/add_shelf`;
+        }
     </script>
 {% endblock %}

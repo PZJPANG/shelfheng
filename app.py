@@ -119,7 +119,14 @@ def register():
 @app.route("/item", methods=["GET", "POST"])
 @login_required
 def item():
-    items = db.execute("SELECT * FROM items WHERE user_id = ?", session["user_id"])
+    # Join items with places to get house names
+    items = db.execute("""
+        SELECT i.*, p.name as house_name, p.address as house_address 
+        FROM items i 
+        LEFT JOIN places p ON i.place = CAST(p.id AS TEXT) 
+        WHERE i.user_id = ? 
+        ORDER BY i.item_id
+    """, session["user_id"])
     return render_template("item.html", items = items)
     
 
@@ -134,8 +141,20 @@ def add():
         db.execute("INSERT INTO items (name, place, shelf, user_id) VALUES (?, ?, ?, ?)", request.form.get("name"), request.form.get("place"), request.form.get("shelf"), session["user_id"])
         flash(f'Succesfully added "{request.form.get("name")}"')
         return redirect("/item")
-    return render_template("add.html")
+    
+    # Get available places (houses) for the current user
+    places = db.execute("SELECT id, name FROM places WHERE user_id = ? ORDER BY name", session["user_id"])
+    # Get all shelves for the current user (for initial load)
+    shelves = db.execute("SELECT id, name, place_id FROM shelves WHERE user_id = ? ORDER BY name", session["user_id"])
+    return render_template("add.html", places=places, shelves=shelves)
 
+
+@app.route("/get_shelves/<int:house_id>")
+@login_required
+def get_shelves(house_id):
+    # Get shelves for a specific house
+    shelves = db.execute("SELECT id, name FROM shelves WHERE place_id = ? AND user_id = ? ORDER BY name", house_id, session["user_id"])
+    return jsonify(shelves)
 
 @app.route("/check", methods=["POST"])
 @login_required
@@ -144,9 +163,14 @@ def check():
     name = (data.get("name") or "").strip()
     if not name:
         return {"exists": False}
-    rows = db.execute("SELECT place, shelf FROM items WHERE name = ? AND user_id = ?", name, session["user_id"])
+    rows = db.execute("""
+        SELECT p.name as house_name, i.shelf 
+        FROM items i 
+        LEFT JOIN places p ON i.place = CAST(p.id AS TEXT) 
+        WHERE i.name = ? AND i.user_id = ?
+    """, name, session["user_id"])
     if rows:
-        return {"exists": True, "place": rows[0]["place"], "shelf": rows[0]["shelf"]}
+        return {"exists": True, "place": rows[0]["house_name"] or "Unknown", "shelf": rows[0]["shelf"]}
     return {"exists": False}
 
 @app.route("/delete", methods=["GET", "POST"])
@@ -166,13 +190,138 @@ def search():
     if request.method == "POST":
         q = request.form.get("q", "")
         if q:
-            items = db.execute("SELECT name, place, shelf FROM items WHERE name LIKE ? AND user_id = ?", "%" + q + "%", session["user_id"])
+            items = db.execute("""
+                SELECT i.name, p.name as house_name, i.shelf 
+                FROM items i 
+                LEFT JOIN places p ON i.place = CAST(p.id AS TEXT) 
+                WHERE i.name LIKE ? AND i.user_id = ?
+            """, "%" + q + "%", session["user_id"])
     return render_template("search.html", items=items)
 
 @app.route("/house", methods=["GET", "POST"])
+@login_required
 def house():
-    return render_template("house.html")
+    # Get all houses/places for the current user
+    houses = db.execute("SELECT * FROM places WHERE user_id = ?", session["user_id"])
+    return render_template("house.html", houses=houses)
+
+@app.route("/house/<int:house_id>/shelves")
+@login_required
+def house_shelves(house_id):
+    # Get house details
+    house = db.execute("SELECT * FROM places WHERE id = ? AND user_id = ?", house_id, session["user_id"])
+    if not house:
+        return render_template("apology.html", errorcode=404, message="House not found")
+    
+    # Get all shelves for this house
+    shelves = db.execute("SELECT * FROM shelves WHERE place_id = ? AND user_id = ?", house_id, session["user_id"])
+    return render_template("house_shelves.html", house=house[0], shelves=shelves)
+
+@app.route("/shelf/<int:shelf_id>/items")
+@login_required
+def shelf_items(shelf_id):
+    # Get shelf details
+    shelf = db.execute("SELECT * FROM shelves WHERE id = ? AND user_id = ?", shelf_id, session["user_id"])
+    if not shelf:
+        return render_template("apology.html", errorcode=404, message="Shelf not found")
+    
+    # Get house details
+    house = db.execute("SELECT * FROM places WHERE id = ? AND user_id = ?", shelf[0]["place_id"], session["user_id"])
+    if not house:
+        return render_template("apology.html", errorcode=404, message="House not found")
+    
+    # Get items in this shelf - both items and shelves now use "Shelf X" format
+    items = db.execute("SELECT * FROM items WHERE place = ? AND shelf = ? AND user_id = ?", 
+                      str(shelf[0]["place_id"]), shelf[0]["name"], session["user_id"])
+    
+    return render_template("shelf_items.html", shelf=shelf[0], house=house[0], items=items)
+
+@app.route("/add_house", methods=["GET", "POST"])
+@login_required
+def add_house():
+    if request.method == "POST":
+        name = request.form.get("name")
+        address = request.form.get("address")
+        
+        if not name:
+            return render_template("apology.html", errorcode=400, message="Must provide house name")
+        elif not address:
+            return render_template("apology.html", errorcode=400, message="Must provide house address")
+        
+        # Add new house to database
+        db.execute("INSERT INTO places (name, address, user_id) VALUES (?, ?, ?)", 
+                  name, address, session["user_id"])
+        
+        flash(f'Successfully added "{name}"')
+        return redirect("/house")
+    
+    return render_template("add_house.html")
+
+@app.route("/house/<int:house_id>/add_shelf", methods=["GET", "POST"])
+@login_required
+def add_shelf(house_id):
+    # Get house details
+    house = db.execute("SELECT * FROM places WHERE id = ? AND user_id = ?", house_id, session["user_id"])
+    if not house:
+        return render_template("apology.html", errorcode=404, message="House not found")
+    
+    if request.method == "POST":
+        name = request.form.get("name")
+        
+        if not name:
+            return render_template("apology.html", errorcode=400, message="Must provide shelf name")
+        
+        # Add new shelf to database
+        db.execute("INSERT INTO shelves (name, place_id, user_id) VALUES (?, ?, ?)", 
+                  name, house_id, session["user_id"])
+        
+        flash(f'Successfully added "{name}"')
+        return redirect(f"/house/{house_id}/shelves")
+    
+    return render_template("add_shelf.html", house=house[0])
+
+@app.route("/delete_house/<int:house_id>", methods=["POST"])
+@login_required
+def delete_house(house_id):
+    # Verify house belongs to user
+    house = db.execute("SELECT * FROM places WHERE id = ? AND user_id = ?", house_id, session["user_id"])
+    if not house:
+        return render_template("apology.html", errorcode=404, message="House not found")
+    
+    # Delete all items in this house first
+    db.execute("DELETE FROM items WHERE place = ? AND user_id = ?", str(house_id), session["user_id"])
+    
+    # Delete all shelves in this house
+    db.execute("DELETE FROM shelves WHERE place_id = ? AND user_id = ?", house_id, session["user_id"])
+    
+    # Delete the house
+    db.execute("DELETE FROM places WHERE id = ? AND user_id = ?", house_id, session["user_id"])
+    
+    flash(f'Successfully deleted "{house[0]["name"]}" and all its contents')
+    return redirect("/house")
+
+@app.route("/delete_shelf/<int:shelf_id>", methods=["POST"])
+@login_required
+def delete_shelf(shelf_id):
+    # Get shelf details
+    shelf = db.execute("SELECT * FROM shelves WHERE id = ? AND user_id = ?", shelf_id, session["user_id"])
+    if not shelf:
+        return render_template("apology.html", errorcode=404, message="Shelf not found")
+    
+    # Get house details for redirect
+    house = db.execute("SELECT * FROM places WHERE id = ? AND user_id = ?", shelf[0]["place_id"], session["user_id"])
+    
+    # Delete all items in this shelf first
+    db.execute("DELETE FROM items WHERE place = ? AND shelf = ? AND user_id = ?", 
+              str(shelf[0]["place_id"]), shelf[0]["name"], session["user_id"])
+    
+    # Delete the shelf
+    db.execute("DELETE FROM shelves WHERE id = ? AND user_id = ?", shelf_id, session["user_id"])
+    
+    flash(f'Successfully deleted "{shelf[0]["name"]}" and all its items')
+    return redirect(f"/house/{shelf[0]['place_id']}/shelves")
 
 @app.route("/mainpage")
+@login_required
 def mainpage():
     return render_template("mainpage.html")

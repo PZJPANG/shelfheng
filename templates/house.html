@@ -5,6 +5,127 @@
 {% endblock %}
 
 {% block body %}
-    <h1 style="font-family: 'Times New Roman'; font-size: 60px;"><u>House</u></h1>
-    <button>Add</button>
+
+<style>
+:root{
+  --bg:#0f0f11; --elev:#17171a; --border:#2a2a31;
+  --text:#ececf3; --muted:#1b1b1f; --gold:#f2c14e; --gold-700:#d4a52a;
+}
+.house-page{ max-width:1200px; margin:64px auto; padding:0 20px; color:var(--text); }
+.house-title{
+  font-weight:800; font-size:clamp(34px,6vw,88px);
+  text-align:center; margin:6px 0 40px; letter-spacing:.5px;
+  color:var(--gold);
+}
+.house-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:24px; margin:32px 0;
+}
+.house-card{
+  background:linear-gradient(180deg,#1c1c21,#141416);
+  border:1px solid var(--border); border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35); overflow:hidden;
+  transition:transform .3s ease,box-shadow .3s ease; cursor:pointer;
+  text-decoration:none; color:inherit;
+}
+.house-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 40px rgba(242,193,78,.15);
+}
+.house-image{
+  width:100%; height:250px; object-fit:contain;
+  border-radius:18px 18px 0 0;
+  background-color:#1a1a1a;
+}
+.house-content{
+  padding:20px;
+  text-align:center;
+}
+.house-name{
+  font-size:20px; font-weight:700; color:var(--gold);
+  margin:0 0 8px; font-family:'Times New Roman',serif;
+}
+.house-address{
+  color:#bdbdcc; font-size:14px; margin:0;
+}
+.empty-state{
+  text-align:center; margin:60px 0; color:#bdbdcc;
+}
+.empty-title{
+  font-size:24px; font-weight:600; margin:0 0 8px; color:var(--text);
+}
+.empty-text{
+  font-size:16px; margin:0; color:#a1a1ae;
+}
+.add-btn{
+  display:block; margin:32px auto 0;
+  padding:12px 32px; border-radius:12px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:700; cursor:pointer; 
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  text-decoration:none; font-size:16px;
+  transition:filter .12s ease,transform .12s ease;
+}
+.add-btn:hover{
+  filter:brightness(1.05); transform:translateY(-1px);
+  color:#fff; text-decoration:none;
+}
+</style>
+
+<div class="house-page">
+  <h1 class="house-title">My Houses</h1>
+  
+  {% if houses %}
+    <div class="house-grid">
+      {% for house in houses %}
+      <div class="house-card">
+        <a href="/house/{{ house.id }}/shelves" style="text-decoration: none; color: inherit;">
+          <img src="/static/tower_{{ loop.index % 5 + 1 }}.png" class="house-image" alt="House Image">
+          <div class="house-content">
+            <h3 class="house-name">{{ house.name }}</h3>
+            <p class="house-address">{{ house.address }}</p>
+          </div>
+        </a>
+        <div style="padding: 12px; text-align: center;">
+          <button class="delete-house-btn" 
+                  data-house-id="{{ house.id }}" 
+                  data-house-name="{{ house.name }}"
+                  style="background: linear-gradient(180deg, #ef4444, #dc2626); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+            Delete House
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3 class="empty-title">No houses added yet</h3>
+      <p class="empty-text">Add your first house to get started!</p>
+    </div>
+  {% endif %}
+  
+  <a href="/add_house" class="add-btn">Add New House</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Use event delegation for delete buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-house-btn')) {
+            const houseId = e.target.getAttribute('data-house-id');
+            const houseName = e.target.getAttribute('data-house-name');
+            
+            if (confirm(`Are you sure you want to delete "${houseName}"? This will also delete all shelves and items in this house. This action cannot be undone.`)) {
+                // Create a form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/delete_house/${houseId}`;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    });
+});
+</script>
+
 {% endblock %}

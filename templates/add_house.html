@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add New House
+{% endblock %}
+
+{% block body %}
+
+<style>
+:root{
+  --bg:#0f0f11; --elev:#17171a; --border:#2a2a31;
+  --text:#ececf3; --muted:#1b1b1f; --gold:#f2c14e; --gold-700:#d4a52a;
+}
+.add-page{ max-width:420px; margin:64px auto; padding:0 20px; color:var(--text); }
+.add-title{
+  font-weight:800; font-size:clamp(34px,6vw,88px);
+  text-align:center; margin:6px 0 20px; letter-spacing:.5px;
+  color:var(--gold);
+}
+.add-card{
+  background:linear-gradient(180deg,#1c1c21,#141416);
+  border:1px solid var(--border); border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35); padding:28px;
+}
+.input{
+  width:100%; font-size:18px; padding:12px 14px; margin:10px 0 14px;
+  border-radius:10px; border:1px solid var(--border);
+  background:var(--muted); color:var(--text); text-align:left;
+}
+.input::placeholder{ color:#a1a1ae; }
+.input:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(242,193,78,.3); }
+
+.btn{
+  width:100%; padding:12px 22px; border-radius:12px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.btn:hover{ filter:brightness(1.05); transform:translateY(-1px); transition:.12s ease; }
+
+.back-btn{
+  display:inline-block; margin:20px 0;
+  padding:8px 20px; border-radius:8px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:600; cursor:pointer; 
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  text-decoration:none; font-size:14px;
+  transition:filter .12s ease,transform .12s ease;
+}
+.back-btn:hover{
+  filter:brightness(1.05); transform:translateY(-1px);
+  color:#fff; text-decoration:none;
+}
+</style>
+
+<div class="add-page">
+  <h1 class="add-title">Add New House</h1>
+
+  <div class="add-card">
+    <form action="/add_house" method="post" autocomplete="off">
+      <input class="input" name="name" placeholder="House Name" type="text" required>
+
+      <input class="input" name="address" placeholder="Address" type="text" required>
+
+      <button class="btn" type="submit">Add House</button>
+    </form>
+  </div>
+  
+  <a href="/house" class="back-btn">← Back to Houses</a>
+</div>
+
+{% endblock %}
