@@ -148,3 +148,14 @@ def check():
     if rows:
         return {"exists": True, "place": rows[0]["place"], "shelf": rows[0]["shelf"]}
     return {"exists": False}
+
+@app.route("/delete", methods=["GET", "POST"])
+@login_required
+def delete():
+    if request.method == "POST":
+        item_ids = request.form.getlist("item_id")
+        if item_ids:
+            for item_id in item_ids:
+                db.execute("DELETE FROM items WHERE item_id = ?", item_id)
+        return redirect("/item")
+    return redirect("/item")
