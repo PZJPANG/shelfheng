@@ -1,16 +1,19 @@
 {% extends "layout.html" %}
 
+{% block title %}
+Login
+{% endblock %}
 
 {% block body %}
-    <h1> LOGIN </h1>
+    <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> Shelf Heng </h1>
     <p></p>
-    <form action="/login" method="post">
-        <div class="mb-3">
+    <form action="/login" method="post" style="font-size: 'large';">
+        <div class="mb-4">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
         </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
+        <button class="btn btn-primary" style="width: 200px;" type="submit">Log In</button>
     </form>
 {% endblock %}
