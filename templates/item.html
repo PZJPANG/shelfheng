@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
+{% block title %}
+Item
+{% endblock %}
+
 {% block body %}   
- 
+    <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> Your Item </h1>
     <style>
     .item {
         overflow: auto;
@@ -15,7 +19,7 @@
         table-layout: fixed;
         border-collapse: collapse;
         border-spacing: 1px;
-        text-align: left;
+        text-align: center;
     }
 
     .item caption {
@@ -56,13 +60,16 @@
                     <td>{{ item.place }}</td>
                     <td>{{ item.shelf }}</td>
                 </tr>
+            {% endfor %}
         </tbody>
     </table>
+    <p></p>
     </div>
-    <form action="/add" method="POST">
+    <form action="/add">
         <button id="add" type="submit">Add item</button>
     </form>
-    <form action="/delete" method="POST">
+    <p></p>
+    <form action="/delete">
         <button id="delete" type="submit">Delete item</button>
     </form>
 

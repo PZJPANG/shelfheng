@@ -1,10 +1,51 @@
 {% extends "layout.html" %}
 
-{% block body %}
+{% block title %}
+Add
+{% endblock %}
 
-    <form action="/add">
-        <input autocomplete="off" autofocus name="name" type="text">
-        <button type="submit">Submit</button>
+{% block body %}
+    
+    <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> Add Item </h1>
+
+    <form action="/add" method="post">
+        <input autocomplete="off" autofocus id="name" name="name" class="form-control mx-auto w-auto" placeholder="Item Name" type="text" required>
+        <p></p>
+        <select style="width: 200px;" name="place" id="place" class="form-control mx-auto" required>
+            <option value="" disabled selected>House</option>
+            <option value="House A">House A</option>
+            <option value="House B">House B</option>
+        </select>
+        <p></p>
+        <input autocomplete="off" name="shelf" id="shelf" class="form-control mx-auto w-auto" placeholder="Shelf" type="text" required>
+        <p></p>
+        <br />
+        <p id="message"></p>
+        <button class="mb-4" type="submit">Add</button>
     </form>
 
+    <script>
+        const nameInput = document.querySelector("#name");
+        const msg = document.querySelector("#message");
+
+        async function checkName(itemName) {
+        if (!itemName) { msg.textContent = ""; return; }
+        const res = await fetch("/check", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: itemName })
+        });
+        const data = await res.json();
+        if (data.exists) {
+            msg.textContent = `Alert: This item already exists in ${data.place}.`;
+            msg.style.color = 'red';
+        } else {
+            msg.textContent = "";
+        }
+        }
+
+        nameInput.addEventListener("keyup", function () {
+        checkName(this.value);
+        });
+    </script>
 {% endblock %}

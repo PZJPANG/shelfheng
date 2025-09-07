@@ -23,22 +23,43 @@
     <body style="background-color: #202020;">
         <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #000000;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/" style="font-family: 'Times New Roman', serif; font-weight: bold;">
+            <a class="navbar-brand" href="/" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px;">
             Shelf Heng
             </a>
             <div class="collapse navbar-collapse" id="navbar">
-            <ul class="navbar-nav ms-auto mt-2">
-                <li class="nav-item">
-                <a class="nav-link" href="/register" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px; color: #DAA520;" >
-                    Register
-                </a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="/login" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px;color: #DAA520;">
-                    Log In
-                </a>
-                </li>
-            </ul>
+                {% if session["user_id"] %}
+                <ul class="navbar-nav ms-auto mt-2">
+                    <li class="nav-item">
+                    <a class="nav-link" href="/item" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px; color: #DAA520;" >
+                        Item
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/search" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px;color: #DAA520;">
+                        Search
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/logout" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px;color: #DAA520;">
+                        Log Out
+                    </a>
+                    </li>
+                </ul>   
+                {% else %}
+                <ul class="navbar-nav ms-auto mt-2">
+                    <li class="nav-item">
+                    <a class="nav-link" href="/register" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px; color: #DAA520;" >
+                        Register
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/login" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px;color: #DAA520;">
+                        Log In
+                    </a>
+                    </li>
+                </ul>
+                {% endif %}
+            
             </div>
         </div>
         </nav>

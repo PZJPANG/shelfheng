@@ -3,6 +3,8 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from helpers import login_required
+
 app = Flask(__name__)
 
 db = SQL("sqlite:///shelfheng.db")
@@ -115,18 +117,34 @@ def register():
 
 
 @app.route("/item", methods=["GET", "POST"])
+@login_required
 def item():
-    if request.method == "GET":
-        errorcode = 400
-        message = "Please select a shelf and a place beforehand!"
-        return render_template("apology.html", errorcode = errorcode, message = message)
-    else:
-        items = db.execute("SELECT * FROM items WHERE place = ?, shelf = ?")
-        return render_template("add.html", items = items)
+    items = db.execute("SELECT * FROM items WHERE user_id = ?", session["user_id"])
+    return render_template("item.html", items = items)
     
 
 @app.route("/add", methods=["GET", "POST"])
+@login_required
 def add():
     if request.method == "POST":
-        return render_template("add.html")
+        if not request.form.get("name"):
+            errorcode = 401
+            message = "Must provide item name"
+            return render_template("apology.html", errorcode = errorcode, message=message)
+        db.execute("INSERT INTO items (name, place, shelf, user_id) VALUES (?, ?, ?, ?)", request.form.get("name"), request.form.get("place"), request.form.get("shelf"), session["user_id"])
+        flash(f'Succesfully added "{request.form.get("name")}"')
+        return redirect("/item")
     return render_template("add.html")
+
+
+@app.route("/check", methods=["POST"])
+@login_required
+def check():
+    data = request.get_json(silent=True) or {}
+    name = (data.get("name") or "").strip()
+    if not name:
+        return {"exists": False}
+    rows = db.execute("SELECT place FROM items WHERE name = ?", name)
+    if rows:
+        return {"exists": True, "place": rows[0]["place"]}
+    return {"exists": False}
