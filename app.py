@@ -144,7 +144,7 @@ def check():
     name = (data.get("name") or "").strip()
     if not name:
         return {"exists": False}
-    rows = db.execute("SELECT place FROM items WHERE name = ?", name)
+    rows = db.execute("SELECT place, shelf FROM items WHERE name = ? AND user_id = ?", name, session["user_id"])
     if rows:
-        return {"exists": True, "place": rows[0]["place"]}
+        return {"exists": True, "place": rows[0]["place"], "shelf": rows[0]["shelf"]}
     return {"exists": False}

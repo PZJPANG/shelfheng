@@ -35,12 +35,22 @@ Add
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: itemName })
         });
-        const data = await res.json();
+        let data;
+        try {
+        data = await res.json();              
+        } catch {
+        msg.textContent = "";
+        msg.removeAttribute('style');
+        return;
+        }
         if (data.exists) {
-            msg.textContent = `Alert: This item already exists in ${data.place}.`;
+            const place = data.place ?? "(unknown place)";
+            const shelf = data.shelf ?? "(unknown shelf)";
+            msg.textContent = `Alert: This item already exists in ${place} Shelf ${shelf}.`;
             msg.style.color = 'red';
         } else {
             msg.textContent = "";
+            msg.removeAttribute('style');
         }
         }
 
