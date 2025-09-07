@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Search 
+{% endblock %}
+
+{% block body %}
+
+    <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> Search for your item </h1>
+
+    <style>
+        input {
+            width: 350px;        
+            font-size: 22px;    
+            padding: 10px 12px;   
+            margin: 0px 0;
+            border-radius: 6px;      
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            opacity: 1;
+            text-align: center;
+            font-family: 'Times New Roman';
+        }
+        
+        div {
+            font-family: 'Times New Roman';
+            font-size: 26px;
+            text-align: center;
+        }
+
+    </style>
+    
+    
+    <form action="/search" method="POST">
+    <div class="mb-4">
+        <input autocomplete="off" autofocus name="q" placeholder="Search your item" type="search">
+    </div>
+        <button class="btn btn-primary" style="width: 350px; padding: 10px 12px; font-size: 22px; font-family: 'Times New Roman';" type="submit">Search</button>
+    </form>
+
+    <p></p>
+    {% if items%}
+        {% for item in items %}
+            <div>{{ item.name }} is at {{ item.place }} in {{ item.shelf }} shelf.</div>
+        {% endfor %}
+    {% else %}
+        <div>The item does not exist.</div>
+    {% endif %}
+
+{% endblock %}
+    

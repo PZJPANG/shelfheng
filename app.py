@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -159,3 +159,12 @@ def delete():
                 db.execute("DELETE FROM items WHERE item_id = ?", item_id)
         return redirect("/item")
     return redirect("/item")
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    items = []
+    if request.method == "POST":
+        q = request.form.get("q", "")
+        if q:
+            items = db.execute("SELECT name, place, shelf FROM items WHERE name LIKE ? AND user_id = ?", "%" + q + "%", session["user_id"])
+    return render_template("search.html", items=items)
