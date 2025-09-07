@@ -168,3 +168,7 @@ def search():
         if q:
             items = db.execute("SELECT name, place, shelf FROM items WHERE name LIKE ? AND user_id = ?", "%" + q + "%", session["user_id"])
     return render_template("search.html", items=items)
+
+@app.route("/map", methods=["GET", "POST"])
+def map():
+    return render_template("map.html")
