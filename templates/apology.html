@@ -5,12 +5,16 @@ Apology
 {% endblock %}
 
 {% block body %}   
- 
+    <style>
+        div {
+            font-size: 50px;
+            font-family: 'Times New Roman';
+        }
+    </style>
     <div>
         Error Code: {{errorcode}}
     </div>
     <div>
         Message: {{message}}
     </div>
-    
 {% endblock %}

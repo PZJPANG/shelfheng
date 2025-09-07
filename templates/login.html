@@ -6,14 +6,29 @@ Login
 
 {% block body %}
     <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> Shelf Heng </h1>
+    <style>
+        input {
+            width: 350px;        
+            font-size: 22px;    
+            padding: 10px 12px;   
+            margin: 1px 0;
+            border-radius: 6px;      
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            opacity: 1;
+            text-align: center;
+            font-family: 'Times New Roman';
+        }
+    </style>
+    
     <p></p>
     <form action="/login" method="post" style="font-size: 'large';">
         <div class="mb-4">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+            <input autocomplete="off" autofocus name="username" placeholder="Username" type="text">
         </div>
         <div class="mb-4">
-            <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+            <input name="password" placeholder="Password" type="password">
         </div>
-        <button class="btn btn-primary" style="width: 200px;" type="submit">Log In</button>
+        <button class="btn btn-primary" style="width: 350px; padding: 10px 12px; font-size: 22px; font-family: 'Times New Roman';" type="submit">Log In</button>
     </form>
 {% endblock %}
