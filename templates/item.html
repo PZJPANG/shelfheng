@@ -1,99 +1,137 @@
 {% extends "layout.html" %}
 
-{% block title %}
-Item
-{% endblock %}
+{% block title %}Item{% endblock %}
 
-{% block body %}   
-    <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> Your Item </h1>
-    <style>
-    .item {
-        overflow: auto;
-        width: 100%;
-    }
+{% block body %}
+<style>
+:root{
+  --bg:#0f0f11; --elev:#17171a; --muted:#222228;
+  --text:#ececf3; --sub:#bdbdcc; --border:#2a2a31;
+  --gold:#f2c14e; --gold-700:#d4a52a; --danger:#ef4444;
+}
+body{ background: radial-gradient(1200px 800px at 50% -200px, #1a1a1e 0%, var(--bg) 40%, var(--bg) 100%); }
+.page{
+  max-width: 1200px; margin: 48px auto; padding: 0 20px; color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+}
+h1{
+  font-weight: 800; font-size: clamp(28px, 5vw, 56px);
+  text-align:center; margin: 10px 0 22px; letter-spacing:.5px;
+}
+.card{
+  background: linear-gradient(180deg, var(--elev), #121214);
+  border:1px solid var(--border); border-radius:18px; box-shadow:0 10px 30px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.table-wrap{ 
+    overflow:auto;
+ }
+table{ 
+    width:100%; 
+    min-width:900px; 
+    border-collapse:separate; 
+    border-spacing:0;
+    font-size: 20px;
+ }
+th, td{ padding:14px 16px; text-align:left; }
+th{
+    color: white;
+    font-weight:700; background:linear-gradient(180deg,#1b1b20,#15151a);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:1;
+}
+td{ border-bottom:1px solid var(--border); color:var(--text); }
+tbody tr:nth-child(even){ background:#121216; }
+tbody tr:hover{ background:#1d1d22; transition: background .15s ease; }
+.col-check{ width:72px; text-align:center; }
+input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--gold); }
 
-    .item table {
-        border: 1px solid #dededf;
-        height: 100%;
-        width: 100%;
-        table-layout: fixed;
-        border-collapse: collapse;
-        border-radius: 30px;
-        border-spacing: 1px;
-        text-align: center;
-        
-    }
-    
-    .item caption {
-        caption-side: top;
-        text-align: left;
-    }
+.controls{
+  display:flex; gap:12px; justify-content:center; margin:18px 0 6px;
+}
+.btn{
+  padding:10px 16px; border-radius:12px; border:1px solid transparent; cursor:pointer;
+  font-weight:700; color:#101013; background:var(--muted); color:var(--text);
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.btn:hover{ filter:brightness(1.05); }
+.btn-primary{
+  background:linear-gradient(180deg, var(--gold), var(--gold-700));
+  color:#141414; border-color:#c99823;
+}
+.btn-danger{
+  background:linear-gradient(180deg,#ff5a5a,#c73a3a);
+  border-color:#b72e2e; color:#fff;
+}
+.btn:disabled{ opacity:.55; cursor:not-allowed; filter:none; }
+.empty{ text-align:center; color:var(--sub); padding:28px 12px; font-size:14px; }
+.caption{ padding:10px 16px; color:var(--sub); font-size:12px; border-top:1px dashed var(--border); }
+</style>
 
-    .item th {
-        border: 1px solid #dededf;
-        background-color: #eceff1;
-        color: #000000;
-        padding: 15px;
-        font-size: 26px;
-    }
+<div class="page">
+  <h1>Your Items</h1>
 
-    .item td {
-        border: 1px solid #dededf;
-        background-color: #ffffff;
-        color: #000000;
-        padding: 15px;
-        font-size: 26px;
-    }
-
-    input[type="checkbox"] {
-    transform: scale(2);
-    margin: 5px;
-    }
-
-    button {
-    padding: 10px 20px;    
-    font-size: 28px;
-    border-radius: 8px;
-    margin: 10px;
-    cursor: pointer;
-    opacity: 0.7;
-    }
-
-    </style>
-
-    <form action="/delete" method="post"> 
-    <div class="item" role="region" tabindex="0">
-    <table>
-        <thead>
+  <div class="card">
+    <div class="table-wrap">
+      <form id="delete-form" action="/delete" method="post">
+        <table>
+          <thead>
             <tr>
-                <th>Select</th>
-                <th>Name</th>
-                <th>Place</th>
-                <th>Shelf</th>
+              <th class="col-check">Select</th>
+              <th>Name</th>
+              <th>Place</th>
+              <th>Shelf</th>
             </tr>
-        </thead>
-        <tbody>
-            {% for item in items %}
-                <tr>
-                    <td><input type="checkbox" name="item_id" value="{{ item.item_id }}"></td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.place }}</td>
-                    <td>{{ item.shelf }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <p></p>
+          </thead>
+          <tbody id="items-body">
+            {% if items and items|length > 0 %}
+              {% for item in items %}
+              <tr>
+                <td class="col-check">
+                  <input type="checkbox" class="row-check" name="item_id" value="{{ item.item_id }}">
+                </td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.place }}</td>
+                <td>{{ item.shelf }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr><td colspan="4" class="empty">No items yet.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+        <div class="caption">Tip: click a row to toggle the checkbox.</div>
+
+        <div class="controls">
+          <button class="btn btn-danger" id="delete-btn" type="submit" disabled>Delete selected</button>
+          <a class="btn btn-primary" href="/add">Add item</a>
+        </div>
+      </form>
     </div>
-    
-    <p></p>
-    <button id="delete" type="submit">Delete selected item</button>
-    </form>
+  </div>
+</div>
 
-    <form action="/add">
-        <button id="add" type="submit">Add item</button>
-    </form>
-    
-    
+<script>
+  // Toggle delete button enabled state
+  const bodyEl = document.getElementById('items-body');
+  const delBtn = document.getElementById('delete-btn');
 
+  function syncDeleteState(){
+    const any = [...document.querySelectorAll('.row-check')].some(cb => cb.checked);
+    delBtn.disabled = !any;
+  }
+  bodyEl?.addEventListener('change', syncDeleteState);
+
+  // Click anywhere in a row to toggle its checkbox
+  bodyEl?.addEventListener('click', (e)=>{
+    const tr = e.target.closest('tr');
+    if(!tr || e.target.tagName === 'INPUT') return;
+    const cb = tr.querySelector('.row-check');
+    if(cb){ cb.checked = !cb.checked; syncDeleteState(); }
+  });
+
+  // Confirm delete
+  document.getElementById('delete-form')?.addEventListener('submit', (e)=>{
+    if(delBtn.disabled || !confirm('Delete selected item(s)?')) e.preventDefault();
+  });
+</script>
 {% endblock %}

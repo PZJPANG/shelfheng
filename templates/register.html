@@ -5,54 +5,86 @@ Register
 {% endblock %}
 
 {% block body %}
-    <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> REGISTER </h1>
-    <p></p>
-    <form action="/register" method="post">
-        <style>
-        input {
-            width: 350px;        
-            font-size: 22px;    
-            padding: 10px 12px;   
-            margin: 1px 0;
-            border-radius: 6px;      
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-            opacity: 1;
-            text-align: center;
-            font-family: 'Times New Roman';
-        }
-        </style>
-        <div class="mb-3">
-            <input autocomplete="off" autofocus name="username" placeholder="Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input id="password" name="password" placeholder="Password" type="password">
-        </div>
-        <div class="mb-3">
-            <input id="confirmation" name="confirmation" placeholder="Confirm your password" type="password">
-        </div>
-        <p id="message"></p>
-        <button class="btn btn-primary" style="width: 350px; font-size: 22px; font-family: 'Times New Roman';" id="submit" type="submit" disabled>Register</button>
 
+<style>
+:root{
+  --bg:#0f0f11; --elev:#17171a; --border:#2a2a31;
+  --text:#ececf3; --muted:#1b1b1f; --gold:#f2c14e; --gold-700:#d4a52a;
+}
+.auth-page{ max-width:420px; margin:64px auto; padding:0 20px; color:var(--text); }
+.auth-title{
+  font-weight:800; font-size:clamp(34px,6vw,72px);
+  text-align:center; margin:6px 0 24px; letter-spacing:.5px;
+}
+.auth-card{
+  background:linear-gradient(180deg,#1c1c21,#141416);
+  border:1px solid var(--border); border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35); padding:28px;
+}
+.input{
+  width:100%; font-size:18px; padding:12px 14px; margin:10px 0 14px;
+  border-radius:10px; border:1px solid var(--border);
+  background:var(--muted); color:var(--text); text-align:left;
+}
+.input::placeholder{ color:#a1a1ae; }
+.input:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(242,193,78,.3); }
+
+.btn{
+  width:100%; padding:12px 22px; border-radius:12px; border:1px solid #c99823;
+  background:linear-gradient(180deg,var(--gold),var(--gold-700));
+  color:#fff; font-weight:700; cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  margin-top:10px;
+}
+.btn:disabled{ opacity:.55; cursor:not-allowed; }
+.btn:hover:not(:disabled){ filter:brightness(1.05); transform:translateY(-1px); transition:.12s ease; }
+
+.note{ font-size:14px; margin:4px 0 0; padding:6px 8px; border-radius:8px; }
+.note.err{ color:#ffd7d7; background:#2a1717; border:1px solid #4d2b2b; }
+.note.ok{ color:#b7f7c2; background:#132017; border:1px solid #2b4a33; }
+</style>
+
+<div class="auth-page">
+  <h1 class="auth-title">Register</h1>
+
+  <div class="auth-card">
+    <form action="/register" method="post" autocomplete="off">
+      <input class="input" autocomplete="username" autofocus name="username" placeholder="Username" type="text" required>
+      <input class="input" id="password" name="password" placeholder="Password" type="password" required>
+      <input class="input" id="confirmation" name="confirmation" placeholder="Confirm your password" type="password" required>
+
+      <p id="message" class="note" style="display:none;"></p>
+
+      <button class="btn" id="submit" type="submit" disabled>Register</button>
     </form>
+  </div>
+</div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let password = document.querySelector("#password");
-            let confirmation = document.querySelector("#confirmation");
-            let message = document.querySelector("#message");
-            let submit = document.querySelector("#submit");
-            confirmation.addEventListener("keyup", function() {
-                if (password.value !== confirmation.value) {
-                    message.innerHTML = "Password do not matched, please retype";
-                    confirmation.style.color = "red";
-                } else {
-                    message.innerHTML = "Password matched, please continue";
-                    confirmation.style.color = "green";
-                    submit.disabled = false;
-                }
-            });
-        });
-    </script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const password = document.querySelector("#password");
+  const confirmation = document.querySelector("#confirmation");
+  const message = document.querySelector("#message");
+  const submit = document.querySelector("#submit");
+
+  function checkMatch(){
+    if (!confirmation.value){ message.style.display="none"; submit.disabled=true; return; }
+    message.style.display="block";
+    if (password.value !== confirmation.value) {
+      message.textContent = "Passwords do not match, please retype.";
+      message.className = "note err";
+      submit.disabled = true;
+    } else {
+      message.textContent = "Passwords match, you can continue.";
+      message.className = "note ok";
+      submit.disabled = false;
+    }
+  }
+
+  confirmation.addEventListener("keyup", checkMatch);
+  password.addEventListener("keyup", checkMatch);
+});
+</script>
 
 {% endblock %}
+
