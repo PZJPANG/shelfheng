@@ -23,9 +23,15 @@
     <body style="background-color: #202020;">
         <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #000000;">
         <div class="container-fluid">
+            {% if session["user_id"] %}
+            <a class="navbar-brand" href="/mainpage" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px;">
+            Shelf Heng
+            </a>
+            {% else %}
             <a class="navbar-brand" href="/" style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 26px;">
             Shelf Heng
             </a>
+            {% endif %}
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session["user_id"] %}
                 <ul class="navbar-nav ms-auto mt-2">
