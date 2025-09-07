@@ -8,18 +8,44 @@ Add
     
     <h1 style="font-family: 'Times New Roman'; font-size: 150px;"> Add Item </h1>
 
+    <style>
+    button {
+        padding: 12px 30px;        
+        font-size: 22px;           
+        border-radius: 8px;        
+        margin-top: 15px;
+        cursor: pointer;
+        background-color: #9c6c1f; /* green */
+        border: 1px solid #9c6c1f;
+        color: white;
+    }
+
+    button:hover {
+        background-color: #6d4e1a;
+    }
+
+    input, select {
+        width: 350px;        
+        font-size: 22px;    
+        padding: 10px 12px;   
+        margin: 10px 0;
+        border-radius: 6px;      
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        opacity: 0.7;
+    }
+    </style>
+
     <form action="/add" method="post">
-        <input autocomplete="off" autofocus id="name" name="name" class="form-control mx-auto w-auto" placeholder="Item Name" type="text" required>
+        <input autocomplete="off" autofocus id="name" name="name" placeholder="Item Name" type="text" required>
         <p></p>
-        <select style="width: 200px;" name="place" id="place" class="form-control mx-auto" required>
+        <select style="width: 350px; opacity: 0.7;" name="place" id="place" required>
             <option value="" disabled selected>House</option>
             <option value="House A">House A</option>
             <option value="House B">House B</option>
         </select>
         <p></p>
-        <input autocomplete="off" name="shelf" id="shelf" class="form-control mx-auto w-auto" placeholder="Shelf" type="text" required>
-        <p></p>
-        <br />
+        <input autocomplete="off" name="shelf" id="shelf" placeholder="Shelf" type="text" required>
         <p id="message"></p>
         <button class="mb-4" type="submit">Add</button>
     </form>
