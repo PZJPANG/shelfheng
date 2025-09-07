@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Main Page
+    Log In
 {% endblock %}
 
-{% block body %}
+{% block main %}
   <div class="shelfheng">
     <img id="david" src="/static/Marble_David.png" class="popout-david">
     <img id="title" src="/static/ShelfHeng_title2.png" alt="Shelf Heng Title" class="popout-title">
@@ -12,19 +12,21 @@
   <div class="quote">
     "If you can't measure it, you can't improve it" - Lord Kelvin
   </div>
-    <div class="about">
+  <div class="about">
     <p>
-        Welcome to Shelf Heng.
-        This project is designed as a visual space to help you manage your shelves in real life.
-        Have you ever bought something you already owned simply because you forgot where you placed it?
-        Or struggled to find the right tools when you were in a hurry, only to end up frustrated?
-        That’s exactly why we created Shelf Heng !
-
-          <p>
-            Our goal is simple: to make your belongings easy to manage.
-            Nothing here is final—everything is a work in progress, continuously improving step by step through curiosity and persistence.
-         </p>
+      Welcome to Shelf Heng.  
+      This project is designed as a visual space to help you manage your shelves in real life.  
+      Have you ever bought something you already owned simply because you forgot where you placed it?  
+      Or struggled to find the right tools when you were in a hurry, only to end up frustrated?  
+      That’s exactly why we created Shelf Heng!
     </p>
+
+    <p>
+      Our goal is simple: to make your belongings easy to manage.  
+      Nothing here is final—everything is a work in progress, continuously improving step by step through curiosity and persistence.
+    </p>
+  </div>
+
 
 
 
@@ -56,13 +58,14 @@
       transition: all 2s ease-out;
     }
 
-    .about{
-        font-family: Times New Roman;
-        font-size: 26px;
-        color: light yellow;
-        margin-top: 100px;
-        margin-bottom: 400px;
+    .about {
+      font-family: "Times New Roman", serif;
+      font-size: 26px;
+      color: lightyellow;
+      margin-top: 100px;
+      margin-bottom: 400px;
     }
+
 
     /* Quote when visible */
     .quote.visible {

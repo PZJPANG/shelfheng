@@ -57,7 +57,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
-        return redirect("/")
+        return render_template("mainpage.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -169,6 +169,10 @@ def search():
             items = db.execute("SELECT name, place, shelf FROM items WHERE name LIKE ? AND user_id = ?", "%" + q + "%", session["user_id"])
     return render_template("search.html", items=items)
 
-@app.route("/map", methods=["GET", "POST"])
-def map():
-    return render_template("map.html")
+@app.route("/house", methods=["GET", "POST"])
+def house():
+    return render_template("house.html")
+
+@app.route("/mainpage")
+def mainpage():
+    return render_template("mainpage.html")
