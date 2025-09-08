@@ -7,11 +7,11 @@
 {% block body %}
 <style>
     .title{
-        font-size: clamp(28px, 8vw, 57px);
+        font-size: clamp(28px, 4vw, 48px);
         font-family: 'Times New Roman', Times, serif;
         font-style: bold;
         color:rgb(255, 255, 255);
-        margin-top: clamp(50px, 10vw, 100px);
+        margin-top: clamp(30px, 5vw, 60px);
         text-align: center;
         padding: 0 20px;
     }
@@ -22,9 +22,9 @@
       color: #FAA520;
       outline: none;
       background: none;
-      padding: clamp(20px, 5vw, 40px) clamp(36px, 8vw, 72px);
+      padding: clamp(15px, 3vw, 25px) clamp(25px, 5vw, 40px);
       cursor: pointer;
-      font-size: clamp(24px, 6vw, 45px);
+      font-size: clamp(20px, 3vw, 32px);
       display: inline-flex;
       align-items: center;
       border-radius: 16px;
@@ -45,13 +45,19 @@
     }
     .center-img {
       width: 100%;
-      max-width: 800px;
+      max-width: 600px;
       height: auto;
     }
 
     @media (max-width: 768px) {
       .center-img {
         max-width: 100%;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .center-img {
+        max-width: 500px;
       }
     }
 
@@ -83,5 +89,4 @@
   <div class="bridge">
     <img src="/static/bridge.png" class="center-img">
   </div>
-{% endblock %}
 {% endblock %}
