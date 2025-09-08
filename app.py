@@ -110,7 +110,7 @@ def register():
         # login the new user
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         session["user_id"] = rows[0]["id"]
-        return redirect("/")
+        return render_template("/mainpage")
 
     return render_template("register.html")
 
