@@ -15,6 +15,9 @@ itsdangerous==2.1.2
 click==8.1.7
 blinker==1.6.2
 
+# Production server (for deployment)
+gunicorn==21.2.0
+
 # Development and testing (optional)
 pytest==7.4.2
 pytest-flask==1.2.0
