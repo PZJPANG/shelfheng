@@ -22,9 +22,11 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(query, params)
             
-            # For SELECT queries, return results
+            # For SELECT queries, return results as dictionaries
             if query.strip().upper().startswith('SELECT'):
-                return cursor.fetchall()
+                rows = cursor.fetchall()
+                # Convert sqlite3.Row objects to dictionaries for JSON serialization
+                return [dict(row) for row in rows]
             else:
                 # For INSERT/UPDATE/DELETE, commit and return cursor
                 conn.commit()
