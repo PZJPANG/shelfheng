@@ -7,11 +7,13 @@
 {% block body %}
 <style>
     .title{
-        font-size: 57px;
+        font-size: clamp(28px, 8vw, 57px);
         font-family: 'Times New Roman', Times, serif;
         font-style: bold;
         color:rgb(255, 255, 255);
-        margin-top: 100px;
+        margin-top: clamp(50px, 10vw, 100px);
+        text-align: center;
+        padding: 0 20px;
     }
     #NA{
       font-family: 'Times New Roman', Times, serif;
@@ -20,13 +22,15 @@
       color: #FAA520;
       outline: none;
       background: none;
-      padding: 40px 72px;
+      padding: clamp(20px, 5vw, 40px) clamp(36px, 8vw, 72px);
       cursor: pointer;
-      font-size: 45px;
+      font-size: clamp(24px, 6vw, 45px);
       display: inline-flex;
       align-items: center;
       border-radius: 16px;
       transition: background-color 0.4s ease;
+      margin: 20px auto;
+      text-align: center;
     }
     #NA:hover,
     #NA:focus {
@@ -34,14 +38,22 @@
     }
 
     .bridge{
-      display: block;   /* so margin works properly */
-      margin-top: 0px;
-      margin-left: -575px;
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      overflow: hidden;
     }
     .center-img {
-  width: 2440px;   /* makes the image 400px wide */
-  height: auto;   /* keeps aspect ratio */
-  }
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+    }
+
+    @media (max-width: 768px) {
+      .center-img {
+        max-width: 100%;
+      }
+    }
 
     .center-img {
     opacity: 0;
@@ -71,4 +83,5 @@
   <div class="bridge">
     <img src="/static/bridge.png" class="center-img">
   </div>
+{% endblock %}
 {% endblock %}

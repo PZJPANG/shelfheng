@@ -14,7 +14,7 @@
         <!-- https://favicon.io/emoji-favicons/money-bag/ -->
         <link href="/static/Shelf_icon.ico" rel="icon">
 
-        <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/style.css" rel="stylesheet">
 
         <style>
         .flash-container {
@@ -204,9 +204,23 @@
             </div>
         {% endif %}
 
-        <main class="container py-5 text-center" style="color: white;">
+        <main class="container py-5 text-center" style="color: white; max-width: 1200px; margin: 0 auto; padding: 20px;">
             {% block body %}{% endblock %}
         </main>
+
+        <style>
+        @media (max-width: 768px) {
+          .container {
+            padding: 15px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .container {
+            padding: 10px !important;
+          }
+        }
+        </style>
 
     </body>
 

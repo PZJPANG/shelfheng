@@ -1,17 +1,345 @@
-.homepage-btn{
-    display: inline-block;
-    width: 180px;
-    padding: 16px;
-    margin-left: 40px;
-    margin-top: 200px;
-    font-weight: 700;
-    font-size: 52px;
-    border: none;
-    border-radius: 4px;
-    background-color: rgb(119, 136, 153);
-    cursor: pointer;
-    color: white; /* ensures link text is white */
-    text-decoration: none; /* removes underline */
-    text-align: center; /* centers the text horizontally */
-    line-height: normal; /* make sure it's not too tall or off-center */
+/* ===== RESPONSIVE DESIGN SYSTEM ===== */
+
+/* CSS Variables for consistent theming */
+:root {
+  --primary-color: #f2c14e;
+  --primary-dark: #d4a52a;
+  --bg-dark: #0f0f11;
+  --bg-elevated: #17171a;
+  --border-color: #2a2a31;
+  --text-light: #ececf3;
+  --text-muted: #bdbdcc;
+  --text-dark: #1b1b1f;
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  --shadow-hover: 0 20px 40px rgba(242,193,78,0.15);
+}
+
+/* ===== GLOBAL RESPONSIVE STYLES ===== */
+
+/* Ensure all elements use border-box */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Responsive typography */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  html { font-size: 14px; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 12px; }
+}
+
+/* ===== NAVBAR RESPONSIVE STYLES ===== */
+.navbar-brand {
+  font-size: clamp(18px, 4vw, 26px) !important;
+}
+
+.navbar-nav .nav-link {
+  font-size: clamp(16px, 3vw, 26px) !important;
+  padding: 0.5rem 1rem !important;
+}
+
+/* Mobile navbar adjustments */
+@media (max-width: 768px) {
+  .navbar-collapse {
+    margin-top: 1rem;
+  }
+  
+  .navbar-nav {
+    text-align: center;
+  }
+  
+  .navbar-nav .nav-item {
+    margin: 0.25rem 0;
+  }
+}
+
+/* ===== CONTAINER RESPONSIVE STYLES ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+}
+
+/* ===== CARD GRID RESPONSIVE SYSTEM ===== */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin: 32px 0;
+}
+
+@media (max-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+}
+
+/* ===== CARD RESPONSIVE STYLES ===== */
+.responsive-card {
+  background: linear-gradient(180deg, #1c1c21, #141416);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.responsive-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+}
+
+@media (max-width: 768px) {
+  .responsive-card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* ===== IMAGE RESPONSIVE STYLES ===== */
+.responsive-image {
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  border-radius: 18px 18px 0 0;
+  background-color: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+  .responsive-image {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-image {
+    height: 180px;
+  }
+}
+
+/* ===== BUTTON RESPONSIVE STYLES ===== */
+.responsive-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: clamp(14px, 2.5vw, 18px);
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.responsive-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+}
+
+@media (max-width: 768px) {
+  .responsive-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    width: 100%;
+    margin: 4px 0;
+  }
+}
+
+/* ===== FORM RESPONSIVE STYLES ===== */
+.responsive-input {
+  width: 100%;
+  font-size: clamp(14px, 2.5vw, 18px);
+  padding: 12px 14px;
+  margin: 10px 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--text-dark);
+  color: var(--text-light);
+  text-align: left;
+}
+
+.responsive-input::placeholder {
+  color: #a1a1ae;
+}
+
+.responsive-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(242,193,78,0.3);
+}
+
+@media (max-width: 768px) {
+  .responsive-input {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+}
+
+/* ===== TABLE RESPONSIVE STYLES ===== */
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: var(--bg-elevated);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.responsive-table th,
+.responsive-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-light);
+}
+
+.responsive-table th {
+  background: var(--text-dark);
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .responsive-table {
+    font-size: 14px;
+  }
+  
+  .responsive-table th,
+  .responsive-table td {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-table {
+    font-size: 12px;
+  }
+  
+  .responsive-table th,
+  .responsive-table td {
+    padding: 6px 8px;
+  }
+}
+
+/* ===== LEGACY HOMEPAGE BUTTON (MAINTAINED FOR COMPATIBILITY) ===== */
+.homepage-btn {
+  display: inline-block;
+  width: clamp(150px, 25vw, 180px);
+  padding: clamp(12px, 2vw, 16px);
+  margin: clamp(20px, 5vw, 40px) auto;
+  font-weight: 700;
+  font-size: clamp(24px, 6vw, 52px);
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(119, 136, 153);
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  line-height: normal;
+  transition: all 0.3s ease;
+}
+
+.homepage-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+  .homepage-btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    display: block;
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mb-5 { margin-bottom: 3rem; }
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mt-5 { margin-top: 3rem; }
+
+.p-1 { padding: 0.25rem; }
+.p-2 { padding: 0.5rem; }
+.p-3 { padding: 1rem; }
+.p-4 { padding: 1.5rem; }
+.p-5 { padding: 3rem; }
+
+/* ===== RESPONSIVE TYPOGRAPHY ===== */
+h1 { font-size: clamp(28px, 6vw, 48px); }
+h2 { font-size: clamp(24px, 5vw, 36px); }
+h3 { font-size: clamp(20px, 4vw, 28px); }
+h4 { font-size: clamp(18px, 3vw, 24px); }
+h5 { font-size: clamp(16px, 2.5vw, 20px); }
+h6 { font-size: clamp(14px, 2vw, 18px); }
+
+/* ===== MOBILE-FIRST APPROACH ===== */
+@media (min-width: 1200px) {
+  .container { max-width: 1140px; }
+}
+
+@media (min-width: 992px) {
+  .container { max-width: 960px; }
+}
+
+@media (min-width: 768px) {
+  .container { max-width: 720px; }
+}
+
+@media (min-width: 576px) {
+  .container { max-width: 540px; }
 }
