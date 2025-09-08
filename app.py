@@ -1,14 +1,12 @@
 import os
-from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import login_required
+from database import db
 
 app = Flask(__name__)
-
-db = SQL("sqlite:///shelfheng.db")
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
