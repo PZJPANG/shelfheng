@@ -122,8 +122,8 @@ ShelfHeng is built on the principle that organization leads to efficiency. By di
 ## 👥 Team
 
 This project was developed collaboratively by:
-- **Zi Jian** - Full-stack development and deployment
-- **Jun Bin** - Project collaboration and development
+- **Zi Jian** ([@PZJPANG](https://github.com/PZJPANG)) 
+- **Jun Bin** ([@Xaaa06](https://github.com/Xaaa06)) 
 
 ## 🎓 What We Learned
 
