@@ -4,7 +4,7 @@
 
 ## 📝 About the Name
 
-**ShelfHeng** combines "Shelf" + "Heng" (meaning "hang" in Chinese), representing a **shelf that hangs online**. Just like a physical shelf that hangs on your wall, ShelfHeng is your digital shelf that "hangs" on the web - accessible anywhere, anytime. It's where you can sort and organize your things in the cloud, making your physical belongings digitally manageable and easily searchable.
+**ShelfHeng** combines "Shelf" + "Heng", representing a **shelf that hangs online**. Just like a physical shelf that hangs on your wall, ShelfHeng is your digital shelf that "hangs" on the web - accessible anywhere, anytime. It's where you can sort and organize your things in the cloud, making your physical belongings digitally manageable and easily searchable.
 
 ## ✨ Features
 
