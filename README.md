@@ -2,6 +2,10 @@
 
 **ShelfHeng** is a web-based inventory management system designed to help you organize and track your belongings across multiple locations and shelves. Never lose track of your items again!
 
+## 📝 About the Name
+
+**ShelfHeng** combines "Shelf" + "Heng" (meaning "hang" in Chinese), representing a **shelf that hangs online**. Just like a physical shelf that hangs on your wall, ShelfHeng is your digital shelf that "hangs" on the web - accessible anywhere, anytime. It's where you can sort and organize your things in the cloud, making your physical belongings digitally manageable and easily searchable.
+
 ## ✨ Features
 
 - **Multi-Location Support**: Organize items across different houses/locations
